@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gaze Dataset Viewer</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .image-container { text-align: center; }
+        img { max-width: 100%; height: auto; }
+        .controls { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Gaze Dataset Viewer</h1>
+    <div class="controls">
+        <button onclick="prevImage()">Previous</button>
+        <span id="index">0</span> / <span id="totalDisplay">{{ item_count - 1 }}</span>
+        <button onclick="nextImage()">Next</button>
+    </div>
+    <div class="image-container">
+        <img id="gazeImage" src="/image/0" alt="Gaze Image">
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        // Wrap Jinja output in a string to satisfy JS linters, then cast
+        const totalItems = Number('{{ item_count - 1 }}');
+
+        function updateImage() {
+            document.getElementById('index').textContent = currentIndex;
+            document.getElementById('gazeImage').src = `/images/${currentIndex}?t=${new Date().getTime()}`;
+            document.getElementById('totalDisplay').textContent = totalItems;
+        }
+
+        function nextImage() {
+            if (currentIndex < totalItems) {
+                currentIndex++;
+                updateImage();
+            }
+        }
+
+        function prevImage() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateImage();
+            }
+        }
+
+        updateImage();
+    </script>
+</body>
+</html>

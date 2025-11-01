@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: gaze-detection
+    env: python
+    plan: starter
+    autoDeploy: true
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bootstrap_images.py && gunicorn app:app --bind 0.0.0.0:$PORT --workers 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10
+      - key: ANNOTATIONS_PATH
+        value: /var/data/annotations.json
+      - key: MERGED_ROOT
+        value: /var/data/merged_images
+    disk:
+      name: data
+      mountPath: /var/data
+      sizeGB: 5
